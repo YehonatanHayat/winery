@@ -25,7 +25,7 @@ const Info = () => {
     // שליפת המידע מהשרת
     const fetchWines = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/info');
+        const response = await fetch('https://wineryserver.onrender.com/api/info');
         if (!response.ok) throw new Error('Failed to fetch wine data');
         const data = await response.json();
         setWines(data);
@@ -48,7 +48,7 @@ const Info = () => {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await fetch('http://localhost:5000/api/info/update', {
+      const response = await fetch('https://wineryserver.onrender.com/api/info/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

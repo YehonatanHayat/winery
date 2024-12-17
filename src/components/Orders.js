@@ -20,7 +20,7 @@ const Orders = () => {
     // שליפת מחירי היינות מהשרת
     const fetchPrices = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/info');
+        const response = await fetch('https://wineryserver.onrender.com/api/info');
         const data = await response.json();
 
         // יצירת מבנה המחירים
@@ -84,7 +84,7 @@ const Orders = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('https://wineryserver.onrender.com/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ wines, totalPrice, customerDetails }),
