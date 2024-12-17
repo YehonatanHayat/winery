@@ -6,11 +6,6 @@ const Navbar = () => {
     <nav className="bg-white shadow-md p-4">
       <ul className="flex space-x-6 justify-center items-center">
         <li>
-          <Link to="/shop" className="text-gray-800 hover:text-green-500">
-            Shop
-          </Link>
-        </li>
-        <li>
           <Link to="/" className="text-gray-800 hover:text-green-500">
             Information
           </Link>

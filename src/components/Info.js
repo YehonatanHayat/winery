@@ -1,92 +1,158 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // יבוא של useNavigate לניווט
+
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const Info = () => {
-  const navigate = useNavigate(); // פונקציה לנווט לדפים
+  const navigate = useNavigate();
+  const [role, setRole] = useState(null);
+  const [isEditing, setIsEditing] = useState(false); // מצב עריכה
+  const [wines, setWines] = useState([]); // המידע יגיע מהשרת
+  const [editedWines, setEditedWines] = useState([]);
 
-  const wines = [
-    {
-      name: 'Arogot',
-      description:
-        'A new and unique blend combining 50% Cabernet Franc and 50% Cabernet Sauvignon. Aged in oak barrels for several months, full-bodied, unique aroma, and long finish.',
-      price: 30,
-      image: 'https://via.placeholder.com/150?text=Arogot+Wine',
-    },
-    {
-      name: 'Kanob Ridge',
-      description: '100% Cabernet Franc from a single vineyard. Aged in oak barrels.',
-      price: 50,
-      image: 'https://via.placeholder.com/150?text=Kanob+Ridge',
-    },
-    {
-      name: 'Kedem',
-      description: '100% Cabernet Sauvignon from a single vineyard. Aged in oak barrels.',
-      price: 50,
-      image: 'https://via.placeholder.com/150?text=Kedem+Wine',
-    },
-  ];
+  // פענוח ה-token ובדיקת ה-role
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setRole(decoded.role);
+      } catch (err) {
+        console.error('Invalid token:', err);
+      }
+    }
+
+    // שליפת המידע מהשרת
+    const fetchWines = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/info');
+        if (!response.ok) throw new Error('Failed to fetch wine data');
+        const data = await response.json();
+        setWines(data);
+        setEditedWines(data);
+      } catch (err) {
+        console.error('Error fetching wine data:', err);
+      }
+    };
+
+    fetchWines();
+  }, []);
+
+  // התחלת עריכה
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  // שמירת השינויים
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      const response = await fetch('http://localhost:5000/api/info/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ wines: editedWines }),
+      });
+
+      if (!response.ok) throw new Error('Failed to save changes.');
+
+      alert('Changes saved successfully!');
+      setWines(editedWines); // עדכון התצוגה
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Error saving changes:', err);
+      alert('Failed to save changes.');
+    }
+  };
+
+  const handleInputChange = (index, field, value) => {
+    const updatedWines = [...editedWines];
+    updatedWines[index][field] = value;
+    setEditedWines(updatedWines);
+  };
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center p-8 relative"
-      style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1528825871115-3581a5387919')",
-      }}
-    >
-      {/* כפתור מעבר ל-Login בצד ימין למעלה */}
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={() => navigate('/login')}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
-        >Login
-        </button>
-      </div>
-
-      <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-2xl bg-opacity-90">
-        <h1 className="text-4xl font-bold mb-6 text-center text-gray-800 animate-bounce">
-          Welcome to Our Winery
-        </h1>
+    
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+        <h1 className="text-4xl font-bold text-center mb-6">Welcome to Our Winery</h1>
         <p className="text-center text-gray-600 mb-8">
-          Our vineyards are located 940 meters above sea level, on the eastern slopes of Gush Etzion,
-          on the way to the Judean Desert.
+          Our vineyards are located 940 meters above sea level, on the eastern slopes of Gush Etzion.
         </p>
 
-        {/* Wines List */}
+        {/* תצוגה או עריכה */}
         <div className="space-y-6">
           {wines.map((wine, index) => (
-            <div
-              key={index}
-              className="flex items-center bg-gray-100 rounded-lg p-4 shadow-md hover:shadow-lg transition duration-300"
-            >
-              <img
-                src={wine.image}
-                alt={wine.name}
-                className="w-32 h-32 object-cover rounded-lg mr-4"
-              />
-              <div>
-                <h2 className="text-2xl font-semibold mb-2 text-gray-800">{wine.name}</h2>
-                <p className="text-gray-600 mb-2">{wine.description}</p>
-                <p className="text-lg font-bold text-green-600">Price: ₪{wine.price}</p>
-              </div>
+            <div key={index} className="bg-gray-200 p-4 rounded-lg shadow">
+              {isEditing ? (
+                <div>
+                  <input
+                    type="text"
+                    value={editedWines[index]?.name || ''}
+                    onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                    className="w-full p-2 border rounded mb-2"
+                  />
+                  <textarea
+                    value={editedWines[index]?.description || ''}
+                    onChange={(e) => handleInputChange(index, 'description', e.target.value)}
+                    className="w-full p-2 border rounded mb-2"
+                  />
+                  <input
+                    type="number"
+                    value={editedWines[index]?.price || ''}
+                    onChange={(e) => handleInputChange(index, 'price', e.target.value)}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+              ) : (
+                <div>
+                  <h2 className="text-2xl font-semibold">{wine.name}</h2>
+                  <p>{wine.description}</p>
+                  <p className="font-bold text-green-600">₪{wine.price}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Contact Section */}
+        {/* כפתורי עריכה ושמירה */}
+        {role === 'admin' && (
+          <div className="mt-6 text-center">
+            {isEditing ? (
+              <button
+                onClick={handleSave}
+                className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                Save Changes
+              </button>
+            ) : (
+              <button
+                onClick={handleEditClick}
+                className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+              >
+                Edit Info
+              </button>
+            )}
+          </div>
+        )}
+
+      {role != 'admin' && (
         <div className="mt-8 text-center">
-          <p className="text-gray-700 mb-2 text-lg">
-            For orders, contact <span className="font-bold">Yael Hayat</span> -{' '}
-            <strong>054-4858509</strong>
-          </p>
-          <button
-            onClick={() => navigate('/orders')} // ניווט לדף ההזמנות
-            className="mt-4 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
-          >
-            or press here
-          </button>
-        </div>
+        {/* כפתור ביצוע הזמנה */}
+        <button
+          onClick={() => navigate('/orders')}
+          className="mr-4 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+        >
+          Place an Order
+        </button>
+          </div>
+        )}
       </div>
     </div>
+    
   );
 };
 

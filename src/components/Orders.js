@@ -1,63 +1,82 @@
-import React, { useState } from 'react';
+
+
+
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Orders = () => {
-  const navigate = useNavigate(); // הוספת הניווט לדף אחר
-  const [quantities, setQuantities] = useState({
-    Asfar: 0,
-    Kanob: 0,
-    Herodion: 0,
-  });
-
+  const navigate = useNavigate();
+  const [quantities, setQuantities] = useState({});
+  const [prices, setPrices] = useState({}); // מחירים מהשרת
   const [customerDetails, setCustomerDetails] = useState({
     name: '',
     phone: '',
     address: '',
   });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const [message, setMessage] = useState(''); // להודעות מהשרת
+  useEffect(() => {
+    // שליפת מחירי היינות מהשרת
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/info');
+        const data = await response.json();
 
-  const prices = {
-    Asfar: 50,
-    Kanob: 60,
-    Herodion: 70,
-  };
+        // יצירת מבנה המחירים
+        const fetchedPrices = {};
+        data.forEach((wine) => {
+          fetchedPrices[wine.name] = wine.price;
+        });
 
-  // עדכון כמויות
+        setPrices(fetchedPrices);
+
+        // אתחול כמויות
+        const initialQuantities = {};
+        Object.keys(fetchedPrices).forEach((wine) => {
+          initialQuantities[wine] = 0;
+        });
+
+        setQuantities(initialQuantities);
+        console.log('✅ Prices fetched:', fetchedPrices);
+      } catch (err) {
+        console.error('❌ Error fetching prices:', err);
+        setError('Failed to load wine prices.');
+      }
+    };
+
+    fetchPrices();
+  }, []);
+
   const handleChange = (e, wine) => {
     setQuantities({ ...quantities, [wine]: parseInt(e.target.value) || 0 });
   };
 
-  // עדכון פרטי הלקוח
   const handleDetailsChange = (e) => {
     const { name, value } = e.target;
     setCustomerDetails({ ...customerDetails, [name]: value });
   };
 
-  // חישוב סה"כ מחיר
   const totalPrice = Object.keys(quantities).reduce(
-    (sum, wine) => sum + quantities[wine] * prices[wine],
+    (sum, wine) => sum + quantities[wine] * (prices[wine] || 0),
     0
   );
 
-  // שליחת ההזמנה לשרת
   const handleOrder = async () => {
     const { name, phone, address } = customerDetails;
 
-    // בדיקת תקינות - שדות חובה
     if (!name || !phone || !address) {
       alert('Please fill in all the required fields: Name, Phone, and Address.');
       return;
     }
 
-const wines = Object.keys(quantities)
-  .filter((wine) => quantities[wine] > 0)
-  .map((wine) => ({
-    name: wine,
-    quantity: quantities[wine],
-    price: prices[wine], // הוספת המחיר מהמילון prices
-  }));
-
+    const wines = Object.keys(quantities)
+      .filter((wine) => quantities[wine] > 0)
+      .map((wine) => ({
+        name: wine,
+        quantity: quantities[wine],
+        price: prices[wine],
+      }));
 
     if (wines.length === 0) {
       alert('Please select at least one wine to order.');
@@ -72,10 +91,20 @@ const wines = Object.keys(quantities)
       });
 
       const data = await response.json();
-      setMessage(data.message); // הצגת הודעת אישור
+      if (response.ok) {
+        setMessage(data.message);
+        setError('');
+        setQuantities({});
+        setCustomerDetails({ name: '', phone: '', address: '' });
+        console.log('✅ Order placed successfully:', data.order);
+      } else {
+        setError(data.error);
+        setMessage('');
+      }
     } catch (err) {
-      console.error('Error:', err);
-      setMessage('Failed to place the order. Please try again.');
+      console.error('❌ Error placing order:', err);
+      setError('Failed to place the order. Please try again.');
+      setMessage('');
     }
   };
 
@@ -86,14 +115,14 @@ const wines = Object.keys(quantities)
 
         {/* תצוגת יינות */}
         <div className="space-y-4">
-          {Object.keys(quantities).map((wine) => (
+          {Object.keys(prices).map((wine) => (
             <div key={wine} className="flex justify-between items-center">
               <span className="text-lg font-medium">{wine}</span>
               <span className="text-gray-700">${prices[wine]} per bottle</span>
               <input
                 type="number"
                 min="0"
-                value={quantities[wine]}
+                value={quantities[wine] || 0}
                 onChange={(e) => handleChange(e, wine)}
                 className="w-20 px-2 py-1 border rounded"
               />
@@ -132,13 +161,11 @@ const wines = Object.keys(quantities)
           />
         </div>
 
-        {/* חישוב סה"כ */}
         <div className="mt-6 text-center">
           <h3 className="text-xl font-semibold">Total Price</h3>
           <p className="text-2xl font-bold text-green-600">${totalPrice}</p>
         </div>
 
-        {/* כפתור הזמנה */}
         <button
           onClick={handleOrder}
           className="mt-4 w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
@@ -146,19 +173,18 @@ const wines = Object.keys(quantities)
           Place Order
         </button>
 
-        {/* כפתור חזרה לדף Info */}
         <button
-          onClick={() => navigate('/info')} // ניווט לדף Info
+          onClick={() => navigate('/info')}
           className="mt-4 w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         >
           Back to Homepage
         </button>
 
-        {/* הודעות */}
         {message && (
-          <div className="mt-4 text-center text-green-600 font-medium">
-            {message}
-          </div>
+          <div className="mt-4 text-center text-green-600 font-medium">{message}</div>
+        )}
+        {error && (
+          <div className="mt-4 text-center text-red-600 font-medium">{error}</div>
         )}
       </div>
     </div>

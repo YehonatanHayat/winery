@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ({ setUserRole }) => { // קבלת setUserRole מה-Props
+const Login = ({ setUserRole, setUserEmail }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,23 +22,24 @@ const Login = ({ setUserRole }) => { // קבלת setUserRole מה-Props
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error);
+        setError(data.error || 'Invalid credentials.');
       } else {
-        const role = data.user.role; // חילוץ התפקיד מהשרת
-        setUserRole(role); // עדכון ה-UserRole בקומפוננטת האב
-        localStorage.setItem('userRole', role); // שמירת התפקיד ב-localStorage
-        alert('Login successful! Welcome ' + data.user.email);
+        // שמירה של ה-token, התפקיד והאימייל
+        const { token, role, email } = data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userRole', role);
+        localStorage.setItem('userEmail', email);
 
-        // ניווט בהתאם לתפקיד
-        if (role === 'admin') {
-          navigate('/inventory');
-        } else {
-          navigate('/shop');
-        }
+        setUserRole(role);
+        setUserEmail(email);
+
+        alert(`Login successful! Welcome ${email}`);
+        console.log(`token `+token)
+        navigate(role === 'admin' ? '/inventory' : '/orders');
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
       console.error('Error:', err);
+      setError('Something went wrong. Please try again.');
     }
   };
 
@@ -77,11 +79,19 @@ const Login = ({ setUserRole }) => { // קבלת setUserRole מה-Props
           </button>
         </form>
         <p className="text-center mt-4 text-sm">
-          Don't have an account?{' '}
-          <a href="/signup" className="text-green-500 hover:underline">
-            Sign up
-          </a>
-        </p>
+           Don't have an account?{' '}
+           <a href="/signup" className="text-green-500 hover:underline">
+             Sign up
+           </a>
+         </p>
+         <p className="text-center mt-4 text-sm">
+         <button
+              onClick={() => navigate('/info')}
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
+              Info
+            </button>
+          </p>
       </div>
     </div>
   );
