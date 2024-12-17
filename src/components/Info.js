@@ -2,15 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { motion } from 'framer-motion';
+import '../CSS/Info.css';
 
 const Info = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
-  const [isEditing, setIsEditing] = useState(false); // מצב עריכה
-  const [wines, setWines] = useState([]); // המידע יגיע מהשרת
+  const [isEditing, setIsEditing] = useState(false);
+  const [wines, setWines] = useState([]);
   const [editedWines, setEditedWines] = useState([]);
 
-  // פענוח ה-token ובדיקת ה-role
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -19,13 +20,16 @@ const Info = () => {
         setRole(decoded.role);
       } catch (err) {
         console.error('Invalid token:', err);
+        setRole(null);
+        
       }
     }
+  }, []);
 
-    // שליפת המידע מהשרת
+  useEffect(() => {
     const fetchWines = async () => {
       try {
-        const response = await fetch('https://wineryserver.onrender.com/api/info');
+        const response = await fetch('http://localhost:5000/api/info');
         if (!response.ok) throw new Error('Failed to fetch wine data');
         const data = await response.json();
         setWines(data);
@@ -38,17 +42,12 @@ const Info = () => {
     fetchWines();
   }, []);
 
-  // התחלת עריכה
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  const handleEditClick = () => setIsEditing(true);
 
-  // שמירת השינויים
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-
-      const response = await fetch('https://wineryserver.onrender.com/api/info/update', {
+      const response = await fetch('http://localhost:5000/api/info/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +59,7 @@ const Info = () => {
       if (!response.ok) throw new Error('Failed to save changes.');
 
       alert('Changes saved successfully!');
-      setWines(editedWines); // עדכון התצוגה
+      setWines(editedWines);
       setIsEditing(false);
     } catch (err) {
       console.error('Error saving changes:', err);
@@ -75,84 +74,53 @@ const Info = () => {
   };
 
   return (
-    
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-4xl font-bold text-center mb-6">Welcome to Our Winery</h1>
-        <p className="text-center text-gray-600 mb-8">
+    <div className="info-page">
+      <div className="info-page-container">
+        <motion.h1 className="info-page-title" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          Welcome to Our Winery
+        </motion.h1>
+        <p className="info-page-description">
           Our vineyards are located 940 meters above sea level, on the eastern slopes of Gush Etzion.
         </p>
 
-        {/* תצוגה או עריכה */}
-        <div className="space-y-6">
+        <div className="info-page-grid">
           {wines.map((wine, index) => (
-            <div key={index} className="bg-gray-200 p-4 rounded-lg shadow">
+            <motion.div key={index} className="info-page-wine-card" whileHover={{ scale: 1.03 }}>
+              <img src={`${process.env.PUBLIC_URL}/${wine.image}`} alt={wine.name} className="info-page-wine-image" />
               {isEditing ? (
                 <div>
-                  <input
-                    type="text"
-                    value={editedWines[index]?.name || ''}
-                    onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                  />
-                  <textarea
-                    value={editedWines[index]?.description || ''}
-                    onChange={(e) => handleInputChange(index, 'description', e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                  />
-                  <input
-                    type="number"
-                    value={editedWines[index]?.price || ''}
-                    onChange={(e) => handleInputChange(index, 'price', e.target.value)}
-                    className="w-full p-2 border rounded"
-                  />
+                  <input type="text" value={editedWines[index]?.name || ''} onChange={(e) => handleInputChange(index, 'name', e.target.value)} className="info-page-input" />
+                  <textarea value={editedWines[index]?.description || ''} onChange={(e) => handleInputChange(index, 'description', e.target.value)} className="info-page-input" />
+                  <input type="number" value={editedWines[index]?.price || ''} onChange={(e) => handleInputChange(index, 'price', e.target.value)} className="info-page-input" />
                 </div>
               ) : (
-                <div>
-                  <h2 className="text-2xl font-semibold">{wine.name}</h2>
+                <div className="info-page-wine-content">
+                  <h2>{wine.name}</h2>
                   <p>{wine.description}</p>
-                  <p className="font-bold text-green-600">₪{wine.price}</p>
+                  <p className="info-page-price">₪{wine.price}</p>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* כפתורי עריכה ושמירה */}
         {role === 'admin' && (
-          <div className="mt-6 text-center">
-            {isEditing ? (
-              <button
-                onClick={handleSave}
-                className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-              >
-                Save Changes
-              </button>
-            ) : (
-              <button
-                onClick={handleEditClick}
-                className="px-6 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-              >
-                Edit Info
-              </button>
-            )}
+          <div>
+            <button onClick={isEditing ? handleSave : handleEditClick} className={`info-page-button ${isEditing ? 'info-page-button-save' : 'info-page-button-edit'}`}>
+              {isEditing ? 'Save Changes' : 'Edit Info'}
+            </button>
           </div>
         )}
 
-      {role != 'admin' && (
-        <div className="mt-8 text-center">
-        {/* כפתור ביצוע הזמנה */}
-        <button
-          onClick={() => navigate('/orders')}
-          className="mr-4 px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-        >
-          Place an Order
-        </button>
+        {role !== 'admin' && (
+          <div>
+            <button onClick={() => navigate('/orders')} className="info-page-button info-page-button-order">
+              Place an Order
+            </button>
           </div>
         )}
       </div>
     </div>
-    
   );
 };
 

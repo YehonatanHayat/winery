@@ -1,0 +1,114 @@
+/* רקע בסיסי */
+.info-page {
+  background-image: url('wine1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Satisfy', cursive;
+}
+
+.info-page-container {
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* כותרת */
+.info-page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-top: -90px;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* תיאור */
+.info-page-description {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+/* גריד */
+.info-page-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* כרטיס יין */
+.info-page-wine-card {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.9s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ffffff;
+}
+
+.info-page-wine-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.info-page-wine-image {
+  width: 70%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.info-page-wine-content {
+  padding: 15px;
+  text-align: center;
+}
+
+.info-page-wine-content h2 {
+  font-size: 1.8rem;
+  color: #f9f9f9;
+  font-weight: bold;
+}
+
+.info-page-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* כפתורים */
+.info-page-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 20px;
+}
+
+.info-page-button-save {
+  background-color: #48bb78;
+  color: white;
+}
+
+.info-page-button-edit {
+  background-color: #f6e05e;
+  color: black;
+}
+
+.info-page-button-order {
+  background-color: #4299e1;
+  color: white;
+}
+
+.info-page-button:hover {
+  opacity: 0.9;
+}

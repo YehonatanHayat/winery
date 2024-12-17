@@ -24,7 +24,7 @@ const Finance = () => {
         }
   
         // Fetch total income
-        const incomeRes = await fetch('https://wineryserver.onrender.com/api/finance/income', {
+        const incomeRes = await fetch('http://localhost:5000/api/finance/income', {
           headers: { Authorization: `Bearer ${token}` }, // הוספת ה-token לכותרת
         });
   
@@ -37,7 +37,7 @@ const Finance = () => {
         setReceipts(incomeData.receipts || []);
   
         // Fetch expenses
-        const expenseRes = await fetch('https://wineryserver.onrender.com/api/finance/expenses', {
+        const expenseRes = await fetch('http://localhost:5000/api/finance/expenses', {
           headers: { Authorization: `Bearer ${token}` },
         });
   
@@ -73,7 +73,7 @@ const Finance = () => {
     }
   
     try {
-      const response = await fetch('https://wineryserver.onrender.com/api/finance/expenses', {
+      const response = await fetch('http://localhost:5000/api/finance/expenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newExpense),

@@ -20,7 +20,7 @@ const OrderManagement = () => {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch('https://wineryserver.onrender.com/api/orders', {
+        const res = await fetch('http://localhost:5000/api/orders', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -37,7 +37,7 @@ const OrderManagement = () => {
   const handleCancelOrder = async (orderId) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`https://wineryserver.onrender.com/api/orders/${orderId}`, {
+      const response = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -68,7 +68,7 @@ const OrderManagement = () => {
 
     try {
       const response = await fetch(
-        `https://wineryserver.onrender.com/api/orders/${selectedOrder._id}/complete`,
+        `http://localhost:5000/api/orders/${selectedOrder._id}/complete`,
         {
           method: 'PUT',
           headers: {

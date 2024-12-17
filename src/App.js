@@ -17,6 +17,13 @@ function App() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
+    localStorage.clear();
+    setUserRole(null);
+    setUserEmail(null);
+    navigate('/login');
+  }, []);
+
+  useEffect(() => {
     if (userRole) {
       localStorage.setItem('userRole', userRole);
     }
@@ -25,11 +32,15 @@ function App() {
     }
   }, [userRole, userEmail]);
 
+
+  
   const handleLogout = () => {
     localStorage.clear();
     setUserRole(null);
     setUserEmail(null);
     setRefreshKey((prevKey) => prevKey + 1);
+    window.location.reload();
+    
   };
 
   return (
@@ -43,7 +54,7 @@ function App() {
             <>
               <Link to="/inventory" className="mr-4">Inventory</Link>
               <Link to="/finance" className="mr-4">Finance</Link>
-              <Link to="/info" className="mr-4">C</Link>
+              <Link to="/info" className="mr-4">Information</Link>
               <Link to="/order-management" className="mr-4">OrderManagement</Link>
             </>
           )}

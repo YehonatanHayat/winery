@@ -1,8 +1,7 @@
 
-
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../CSS/Orders.css'; // קובץ ה-CSS החדש
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -20,7 +19,7 @@ const Orders = () => {
     // שליפת מחירי היינות מהשרת
     const fetchPrices = async () => {
       try {
-        const response = await fetch('https://wineryserver.onrender.com/api/info');
+        const response = await fetch('http://localhost:5000/api/info');
         const data = await response.json();
 
         // יצירת מבנה המחירים
@@ -84,7 +83,7 @@ const Orders = () => {
     }
 
     try {
-      const response = await fetch('https://wineryserver.onrender.com/api/orders', {
+      const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ wines, totalPrice, customerDetails }),
@@ -109,36 +108,36 @@ const Orders = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">Place Your Order</h2>
+    <div className="orders-page">
+      <div className="orders-container">
+        <h2 className="orders-title">Place Your Order</h2>
 
         {/* תצוגת יינות */}
-        <div className="space-y-4">
+        <div className="wines-list">
           {Object.keys(prices).map((wine) => (
-            <div key={wine} className="flex justify-between items-center">
-              <span className="text-lg font-medium">{wine}</span>
-              <span className="text-gray-700">${prices[wine]} per bottle</span>
+            <div key={wine} className="wine-item">
+              <span className="wine-name">{wine}</span>
+              <span className="wine-price">₪{prices[wine]} per bottle</span>
               <input
                 type="number"
                 min="0"
                 value={quantities[wine] || 0}
                 onChange={(e) => handleChange(e, wine)}
-                className="w-20 px-2 py-1 border rounded"
+                className="wine-quantity"
               />
             </div>
           ))}
         </div>
 
         {/* שדות פרטי לקוח */}
-        <div className="mt-6 space-y-4">
+        <div className="customer-details">
           <input
             type="text"
             name="name"
             placeholder="Your Name"
             value={customerDetails.name}
             onChange={handleDetailsChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="input-field"
             required
           />
           <input
@@ -147,7 +146,7 @@ const Orders = () => {
             placeholder="Your Phone Number"
             value={customerDetails.phone}
             onChange={handleDetailsChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="input-field"
             required
           />
           <input
@@ -156,36 +155,26 @@ const Orders = () => {
             placeholder="Your Address"
             value={customerDetails.address}
             onChange={handleDetailsChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="input-field"
             required
           />
         </div>
 
-        <div className="mt-6 text-center">
-          <h3 className="text-xl font-semibold">Total Price</h3>
-          <p className="text-2xl font-bold text-green-600">${totalPrice}</p>
+        <div className="total-price">
+          <h3>Total Price</h3>
+          <p>₪{totalPrice}</p>
         </div>
 
-        <button
-          onClick={handleOrder}
-          className="mt-4 w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-        >
+        <button onClick={handleOrder} className="button button-order">
           Place Order
         </button>
 
-        <button
-          onClick={() => navigate('/info')}
-          className="mt-4 w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
+        <button onClick={() => navigate('/info')} className="button button-back">
           Back to Homepage
         </button>
 
-        {message && (
-          <div className="mt-4 text-center text-green-600 font-medium">{message}</div>
-        )}
-        {error && (
-          <div className="mt-4 text-center text-red-600 font-medium">{error}</div>
-        )}
+        {message && <div className="success-message">{message}</div>}
+        {error && <div className="error-message">{error}</div>}
       </div>
     </div>
   );

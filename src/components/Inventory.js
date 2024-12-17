@@ -22,7 +22,7 @@ const Inventory = () => {
 
     const fetchInventory = async () => {
       try {
-        const res = await fetch('https://wineryserver.onrender.com/api/inventory', {
+        const res = await fetch('http://localhost:5000/api/inventory', {
           headers: { Authorization: `Bearer ${token}` }, // שליחת ה-token
         });
         const data = await res.json();
@@ -34,7 +34,7 @@ const Inventory = () => {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch('https://wineryserver.onrender.com/api/orders', {
+        const res = await fetch('http://localhost:5000/api/orders', {
           headers: { Authorization: `Bearer ${token}` }, // שליחת ה-token
         });
         const data = await res.json();
@@ -63,7 +63,7 @@ const Inventory = () => {
     }
 
     try {
-      const response = await fetch('https://wineryserver.onrender.com/api/inventory', {
+      const response = await fetch('http://localhost:5000/api/inventory', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Inventory = () => {
   const cancelOrder = async (order) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`https://wineryserver.onrender.com/api/orders/${order._id}`, {
+      const response = await fetch(`http://localhost:5000/api/orders/${order._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -116,7 +116,7 @@ const Inventory = () => {
     }
 
     try {
-      await fetch(`https://wineryserver.onrender.com/api/orders/${selectedOrder._id}/complete`, {
+      await fetch(`http://localhost:5000/api/orders/${selectedOrder._id}/complete`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

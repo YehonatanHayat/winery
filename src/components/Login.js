@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../CSS/login.css';
 
 const Login = ({ setUserRole, setUserEmail }) => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const Login = ({ setUserRole, setUserEmail }) => {
     setError('');
 
     try {
-      const response = await fetch('https://wineryserver.onrender.com/api/users/login', {
+      const response = await fetch('http://localhost:5000/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -24,7 +25,6 @@ const Login = ({ setUserRole, setUserEmail }) => {
       if (!response.ok) {
         setError(data.error || 'Invalid credentials.');
       } else {
-        // שמירה של ה-token, התפקיד והאימייל
         const { token, role, email } = data;
         localStorage.setItem('token', token);
         localStorage.setItem('userRole', role);
@@ -34,7 +34,6 @@ const Login = ({ setUserRole, setUserEmail }) => {
         setUserEmail(email);
 
         alert(`Login successful! Welcome ${email}`);
-        console.log(`token `+token)
         navigate(role === 'admin' ? '/inventory' : '/orders');
       }
     } catch (err) {
@@ -44,54 +43,43 @@ const Login = ({ setUserRole, setUserEmail }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Welcome</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="login-page">
+      <div className="login-page-container">
+        <h2 className="login-page-title">Welcome</h2>
+        <form onSubmit={handleSubmit}>
           <div>
-            <label>Email address</label>
+            <label className="login-page-label">Email address</label>
             <input
               type="email"
               placeholder="Your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-lg"
+              className="login-page-input"
             />
           </div>
           <div>
-            <label>Password</label>
+            <label className="login-page-label">Password</label>
             <input
               type="password"
               placeholder="Your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-lg"
+              className="login-page-input"
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            className="w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-          >
+          {error && <p className="login-page-error">{error}</p>}
+          <button type="submit" className="login-page-button-signin">
             Sign in
           </button>
         </form>
-        <p className="text-center mt-4 text-sm">
-           Don't have an account?{' '}
-           <a href="/signup" className="text-green-500 hover:underline">
-             Sign up
-           </a>
-         </p>
-         <p className="text-center mt-4 text-sm">
-         <button
-              onClick={() => navigate('/info')}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              Info
-            </button>
-          </p>
+        <div className="login-page-link">
+          Don't have an account? <a href="/signup">Sign up</a>
+        </div>
+        <button onClick={() => navigate('/info')} className="login-page-button-info">
+          Info
+        </button>
       </div>
     </div>
   );
