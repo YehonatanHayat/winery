@@ -1,43 +1,45 @@
+// Order Management Component
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import API_BASE_URL from '../config';
 const OrderManagement = () => {
-  const [orders, setOrders] = useState([]); // כל ההזמנות
-  const [selectedOrder, setSelectedOrder] = useState(null); // חלון התשלום
-  const [paymentDetails, setPaymentDetails] = useState({ method: '', paidTo: '' }); // פרטי התשלום
-  const [message, setMessage] = useState(''); // הודעת הצלחה/שגיאה
+  // State Management
+  const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [paymentDetails, setPaymentDetails] = useState({ method: '', paidTo: '' });
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
 
+  // Fetch Orders
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      console.error('❌ No token found');
       navigate('/info');
       return;
     }
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/orders', {
+        const res = await fetch(`${API_BASE_URL}/api/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
         setOrders(data);
-      } catch (err) {
-        console.error('Error fetching orders:', err);
+      } catch {
+        setMessage('Failed to fetch orders.');
       }
     };
 
     fetchOrders();
   }, [message]);
 
-  // ביטול הזמנה
+  // Cancel an Order
   const handleCancelOrder = async (orderId) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -47,18 +49,17 @@ const OrderManagement = () => {
 
       setMessage('Order canceled successfully.');
       setOrders(orders.filter((order) => order._id !== orderId));
-    } catch (err) {
-      console.error('Error canceling order:', err);
+    } catch {
       setMessage('Failed to cancel order.');
     }
   };
 
-  // פתיחת חלון התשלום להזמנה מסוימת
+  // Open Payment Modal
   const handleCompleteOrder = (order) => {
     setSelectedOrder(order);
   };
 
-  // שמירת פרטי התשלום ושליחת ההזמנה כ"הושלמה"
+  // Submit Payment
   const submitPayment = async () => {
     const token = localStorage.getItem('token');
     if (!paymentDetails.method || !paymentDetails.paidTo) {
@@ -68,7 +69,7 @@ const OrderManagement = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${selectedOrder._id}/complete`,
+        `${API_BASE_URL}/api/orders/${selectedOrder._id}/complete`,
         {
           method: 'PUT',
           headers: {
@@ -85,8 +86,7 @@ const OrderManagement = () => {
       setOrders(orders.filter((order) => order._id !== selectedOrder._id));
       setSelectedOrder(null);
       setPaymentDetails({ method: '', paidTo: '' });
-    } catch (err) {
-      console.error('Error completing order:', err);
+    } catch {
       setMessage('Failed to complete order.');
     }
   };
@@ -96,7 +96,6 @@ const OrderManagement = () => {
       <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold mb-6 text-center">📋 Order Management</h2>
 
-        {/* רשימת הזמנות */}
         <ul>
           {orders.map((order) => (
             <li key={order._id} className="border-b py-4">
@@ -110,8 +109,15 @@ const OrderManagement = () => {
                 <strong>Address:</strong> {order.customerAddress}
               </p>
               <p>
+                <strong>Order:</strong> {order.items.map((item) => `${item.name} x ${item.quantity}`).join(', ')}
+              </p>
+              <p>
                 <strong>Total Price:</strong> ₪{order.totalPrice}
               </p>
+              <p>
+                <strong>Order Date:</strong> {new Date(order.paymentDetails?.date).toLocaleDateString()}
+              </p>
+
               <div className="flex space-x-4 mt-2">
                 <button
                   onClick={() => handleCancelOrder(order._id)}
@@ -130,12 +136,10 @@ const OrderManagement = () => {
           ))}
         </ul>
 
-        {/* הודעת הצלחה/שגיאה */}
         {message && (
           <p className="mt-4 text-center text-green-600 font-medium">{message}</p>
         )}
 
-        {/* חלון תשלום */}
         {selectedOrder && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg relative">

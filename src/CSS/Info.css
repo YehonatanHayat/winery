@@ -112,3 +112,21 @@
 .info-page-button:hover {
   opacity: 0.9;
 }
+
+/* שדות קלט במצב עריכה */
+.info-page-input {
+  width: 90%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc; /* מסגרת עדינה */
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.9); /* רקע לבן-שקוף */
+  color: #333; /* טקסט כהה */
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.info-page-input:focus {
+  border-color: #48bb78; /* מסגרת בצבע ירוק בפוקוס */
+}

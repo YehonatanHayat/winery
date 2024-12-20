@@ -1,52 +1,48 @@
+// Inventory Management Component
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import API_BASE_URL from '../config';
 const Inventory = () => {
-  const [inventoryItems, setInventoryItems] = useState([]); // רשימת המלאי
-  const [orders, setOrders] = useState([]); // רשימת ההזמנות
-  const [newItem, setNewItem] = useState({ item: '', quantity: 0 }); // מוצר חדש להוספה
-  const [message, setMessage] = useState(''); // הודעות הצלחה/שגיאה
-  const [selectedOrder, setSelectedOrder] = useState(null); // תצוגת תשלום
-  const [paymentDetails, setPaymentDetails] = useState({ method: '', paidTo: '' }); // פרטי תשלום
+  // State Management
+  const [inventoryItems, setInventoryItems] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [newItem, setNewItem] = useState({ item: '', quantity: 0 });
+  const [message, setMessage] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [paymentDetails, setPaymentDetails] = useState({ method: '', paidTo: '' });
 
-  const navigate = useNavigate(); // ניווט בין עמודים
+  const navigate = useNavigate();
 
+  // Fetch Inventory and Orders
   useEffect(() => {
-    const token = localStorage.getItem('token'); // שליפת ה-token מה-localStorage
+    const token = localStorage.getItem('token');
 
     if (!token) {
-      console.error('❌ No token found');
-      navigate('/info'); // אם אין טוקן, מעבירים לדף הבית/התחברות
+      navigate('/info');
       return;
     }
 
     const fetchInventory = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/inventory', {
-          headers: { Authorization: `Bearer ${token}` }, // שליחת ה-token
+        const res = await fetch(`${API_BASE_URL}/api/inventory`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
         setInventoryItems(data);
       } catch (err) {
-        console.error('Error fetching inventory:', err);
+        setMessage('Failed to fetch inventory.');
       }
     };
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/orders', {
-          headers: { Authorization: `Bearer ${token}` }, // שליחת ה-token
+        const res = await fetch(`${API_BASE_URL}/api/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        if (Array.isArray(data)) {
-          setOrders(data);
-        } else {
-          console.error('Orders response is not an array:', data);
-          setOrders([]);
-        }
+        setOrders(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error('Error fetching orders:', err);
-        setOrders([]);
+        setMessage('Failed to fetch orders.');
       }
     };
 
@@ -54,56 +50,53 @@ const Inventory = () => {
     fetchOrders();
   }, [message]);
 
-  // הוספת פריט חדש למלאי
+  // Add New Inventory Item
   const handleAddItem = async () => {
-    const token = localStorage.getItem('token'); // שליפת ה-token
+    const token = localStorage.getItem('token');
     if (!newItem.item || newItem.quantity <= 0) {
       alert('Please enter a valid item name and quantity.');
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/inventory', {
+      const response = await fetch(`${API_BASE_URL}/api/inventory`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`, // שליחת ה-token
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newItem),
       });
       const data = await response.json();
       setMessage(data.message);
-      setInventoryItems([...inventoryItems, { ...newItem, _id: data._id }]); // הוספת הפריט לרשימה
+      setInventoryItems([...inventoryItems, { ...newItem, _id: data._id }]);
       setNewItem({ item: '', quantity: 0 });
     } catch (err) {
-      console.error('Error adding item:', err);
       setMessage('Failed to add item.');
     }
   };
 
-  // ביטול הזמנה
+  // Cancel an Order
   const cancelOrder = async (order) => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${order._id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${order._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
 
       if (data.error) {
-        console.error('Error deleting order:', data.error);
         setMessage('Failed to cancel order.');
         return;
       }
       setMessage('Order canceled and inventory restored.');
     } catch (err) {
-      console.error('Error canceling order:', err);
       setMessage('Failed to cancel order.');
     }
   };
 
-  // סימון הזמנה כ"בוצעה"
+  // Complete an Order
   const handleCompleteOrder = (order) => {
     setSelectedOrder(order);
   };
@@ -116,7 +109,7 @@ const Inventory = () => {
     }
 
     try {
-      await fetch(`http://localhost:5000/api/orders/${selectedOrder._id}/complete`, {
+      await fetch(`${API_BASE_URL}/api/orders/${selectedOrder._id}/complete`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +122,6 @@ const Inventory = () => {
       setSelectedOrder(null);
       setPaymentDetails({ method: '', paidTo: '' });
     } catch (err) {
-      console.error('Error completing order:', err);
       setMessage('Failed to complete order.');
     }
   };
@@ -139,7 +131,7 @@ const Inventory = () => {
       <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg relative">
         <h2 className="text-3xl font-bold mb-6 text-center">🍷 Inventory Management</h2>
 
-        {/* רשימת מלאי */}
+        {/* Inventory List */}
         <h3 className="text-2xl font-bold">📦 Inventory</h3>
         <ul>
           {inventoryItems.map((item) => (
@@ -150,7 +142,7 @@ const Inventory = () => {
           ))}
         </ul>
 
-        {/* טופס להוספת פריט */}
+        {/* Add Inventory Form */}
         {localStorage.getItem('userRole') === 'admin' && (
           <div className="mt-8">
             <h3 className="text-2xl font-bold mb-4">➕ Add New Item</h3>
@@ -185,7 +177,7 @@ const Inventory = () => {
           </div>
         )}
 
-        {/* Modal לתשלום */}
+        {/* Payment Modal */}
         {selectedOrder && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg relative">
@@ -230,4 +222,3 @@ const Inventory = () => {
 };
 
 export default Inventory;
-

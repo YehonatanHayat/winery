@@ -1,20 +1,22 @@
-
+// Login Component
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../CSS/login.css';
-
+import API_BASE_URL from '../config';
 const Login = ({ setUserRole, setUserEmail }) => {
+  // State Management
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/login', {
+      const response = await fetch(`${API_BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -37,7 +39,6 @@ const Login = ({ setUserRole, setUserEmail }) => {
         navigate(role === 'admin' ? '/inventory' : '/orders');
       }
     } catch (err) {
-      console.error('Error:', err);
       setError('Something went wrong. Please try again.');
     }
   };
