@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { motion } from 'framer-motion';
 import '../CSS/Info.css';
-
+import API_BASE_URL from '../config';
 const Info = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
@@ -29,7 +29,7 @@ const Info = () => {
   useEffect(() => {
     const fetchWines = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/info');
+        const response = await fetch(`${API_BASE_URL}/api/info`);
         if (!response.ok) throw new Error('Failed to fetch wine data');
         const data = await response.json();
         setWines(data);
@@ -47,7 +47,7 @@ const Info = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/info/update', {
+      const response = await fetch(`${API_BASE_URL}/api/info/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
