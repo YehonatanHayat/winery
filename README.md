@@ -1,70 +1,82 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Winery Application Frontend
 
-## Available Scripts
+This repository contains the frontend implementation of a winery management system built using **React**. The application includes several key features to manage and interact with the backend services.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+### Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Dynamic Role-Based Access:**
+  - Admin users can manage inventory, orders, and finances.
+  - Customers can view information, place orders, and interact with relevant content.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Server Communication:**
+  - The application fetches and posts data to a Node.js backend using REST API endpoints.
+  - Token-based authentication ensures secure communication.
 
-### `npm test`
+- **Component Architecture:**
+  - The project is modular, with reusable components like `ProtectedRoute`, `Login`, and `Signup`.
+  - Components are structured for scalability and ease of maintenance.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Modern Design:**
+  - Styled using CSS with responsive layouts and animations for a user-friendly experience.
+  - Aesthetic designs for each page, including an **Info** page, **Order Management**, and **Gallery**.
 
-### `npm run build`
+- **Core Pages:**
+  - **Login & Signup:** Handles user authentication.
+  - **Orders:** Enables customers to place and review orders.
+  - **Inventory Management (Admin):** Allows admins to manage stock.
+  - **Finance Management (Admin):** Provides insights into income and expenses.
+  - **Gallery:** Displays images with options to add or delete for admins.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Components:**
+  - `Info.js`: Displays general information with a welcoming layout.
+  - `Orders.js`: Handles order placement and customer details.
+  - `Inventory.js`: Provides inventory management tools for admins.
+  - `Finance.js`: Tracks income and expenses.
+  - `ProtectedRoute.js`: Secures admin-only routes.
 
-### `npm run eject`
+- **Styling:**
+  - Custom CSS for each component, ensuring clean and consistent design.
+  - Responsive design for compatibility across devices.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### API Communication
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The application interacts with a backend server through the following API routes:
+- **User Authentication:** `/api/users`
+- **Order Management:** `/api/orders`
+- **Inventory Management:** `/api/inventory`
+- **Finance Management:** `/api/finance`
+- **Info Page Data:** `/api/info`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+### Getting Started
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Run the application:**
+   ```bash
+   npm start
+   ```
 
-### Code Splitting
+3. **Ensure backend server is running** to enable data fetching and other interactions.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+### Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- The project was designed to demonstrate a clean, modular structure and best practices in React development.
+- All sensitive information, such as API keys and database URIs, are stored securely and excluded from the repository.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For further details or inquiries, please feel free to reach out!
