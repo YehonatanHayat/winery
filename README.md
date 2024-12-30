@@ -21,14 +21,13 @@ This repository contains the frontend implementation of a winery management syst
 
 - **Modern Design:**
   - Styled using CSS with responsive layouts and animations for a user-friendly experience.
-  - Aesthetic designs for each page, including an **Info** page, **Order Management**, and **Gallery**.
+  - Aesthetic designs for each page, including an **Info** page and **Order Management**.
 
 - **Core Pages:**
   - **Login & Signup:** Handles user authentication.
   - **Orders:** Enables customers to place and review orders.
   - **Inventory Management (Admin):** Allows admins to manage stock.
   - **Finance Management (Admin):** Provides insights into income and expenses.
-  - **Gallery:** Displays images with options to add or delete for admins.
 
 ---
 
