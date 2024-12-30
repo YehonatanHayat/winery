@@ -1,9 +1,9 @@
-// Inventory Management Component
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../config';
 const Inventory = () => {
-  // State Management
+
   const [inventoryItems, setInventoryItems] = useState([]);
   const [orders, setOrders] = useState([]);
   const [newItem, setNewItem] = useState({ item: '', quantity: 0 });

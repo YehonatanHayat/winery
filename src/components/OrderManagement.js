@@ -1,9 +1,7 @@
-// Order Management Component
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../config';
 const OrderManagement = () => {
-  // State Management
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [paymentDetails, setPaymentDetails] = useState({ method: '', paidTo: '' });

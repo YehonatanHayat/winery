@@ -1,7 +1,7 @@
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // כל קבצי הקוד שלך
-    "./public/index.html",        // קובץ ה-HTML הראשי
+    "./src/**/*.{js,jsx,ts,tsx}", 
+    "./public/index.html",       
   ],
   theme: {
     extend: {},

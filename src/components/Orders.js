@@ -16,30 +16,27 @@ const Orders = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // שליפת מחירי היינות מהשרת
+    
     const fetchPrices = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/info`);
         const data = await response.json();
 
-        // יצירת מבנה המחירים
         const fetchedPrices = {};
         data.forEach((wine) => {
           fetchedPrices[wine.name] = wine.price;
         });
 
         setPrices(fetchedPrices);
-
-        // אתחול כמויות
         const initialQuantities = {};
         Object.keys(fetchedPrices).forEach((wine) => {
           initialQuantities[wine] = 0;
         });
 
         setQuantities(initialQuantities);
-        console.log('✅ Prices fetched:', fetchedPrices);
+        console.log(' Prices fetched:', fetchedPrices);
       } catch (err) {
-        console.error('❌ Error fetching prices:', err);
+        console.error(' Error fetching prices:', err);
         setError('Failed to load wine prices.');
       }
     };
@@ -95,13 +92,13 @@ const Orders = () => {
         setError('');
         setQuantities({});
         setCustomerDetails({ name: '', phone: '', address: '' });
-        console.log('✅ Order placed successfully:', data.order);
+        console.log(' Order placed successfully:', data.order);
       } else {
         setError(data.error);
         setMessage('');
       }
     } catch (err) {
-      console.error('❌ Error placing order:', err);
+      console.error(' Error placing order:', err);
       setError('Failed to place the order. Please try again.');
       setMessage('');
     }

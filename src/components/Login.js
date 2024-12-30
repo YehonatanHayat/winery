@@ -1,10 +1,9 @@
-// Login Component
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../CSS/login.css';
 import API_BASE_URL from '../config';
 const Login = ({ setUserRole, setUserEmail }) => {
-  // State Management
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

@@ -25,7 +25,7 @@ const Finance = () => {
   
         // Fetch total income
         const incomeRes = await fetch(`${API_BASE_URL}/api/finance/income`, {
-          headers: { Authorization: `Bearer ${token}` }, // הוספת ה-token לכותרת
+          headers: { Authorization: `Bearer ${token}` },
         });
   
         if (!incomeRes.ok) {
@@ -58,7 +58,6 @@ const Finance = () => {
 
   // Add new expense
   const handleAddExpense = async () => {
-    // בדיקת תקינות של כל השדות
     if (!newExpense.category.trim()) {
       alert('Category is required.');
       return;

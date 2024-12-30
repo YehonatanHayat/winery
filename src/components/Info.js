@@ -36,7 +36,7 @@ const Info = () => {
         setEditedWines(data);
       } catch (err) {
         console.error('Error fetching wine data:', err);
-      }
+      } 
     };
 
     fetchWines();
