@@ -70,7 +70,7 @@ The application interacts with a backend server through the following API routes
    ```
 
 3. **Ensure backend server is running** to enable data fetching and other interactions.
-   You can find the backend repository here: [Winery Server](https://github.com/YehonatanHayat/WineryServer.git).
+   You can find the backend repository here: [Winery Server](https://github.com/YehonatanHayat/Winery-server.git).
 
 ---
 
