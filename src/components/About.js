@@ -25,8 +25,8 @@ const About = () => {
         
         {/* Section for Images */}
         <div className="about-image-section">
-          <img src="/photo/wine6.jpg" alt="Vineyard" className="about-image" />
-          <img src="/photo/wine5.jpg" alt="Wine Tasting" className="about-image" />
+          <img src="/Photo/wine6.jpg" alt="Vineyard" className="about-image" />
+          <img src="/Photo/wine5.jpg" alt="Wine Tasting" className="about-image" />
         </div>
         
         <h3 className="about-subtitle">Our Story</h3>
