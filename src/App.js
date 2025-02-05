@@ -14,13 +14,14 @@ import About from './components/About';
 
 
 function App() {
+  if (window.location.protocol === 'https:') {
+    window.WebSocket = undefined;
+  }
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
 
-  if (window.location.protocol === 'https:') {
-    window.WebSocket = undefined;
-  }
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
