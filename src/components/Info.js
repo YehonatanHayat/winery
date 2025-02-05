@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { motion } from 'framer-motion';
 import '../CSS/Info.css';
+import API_BASE_URL from '../config';
 
 const Info = () => {
   const navigate = useNavigate();
