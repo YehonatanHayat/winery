@@ -96,8 +96,8 @@ const Login = ({ setUserRole, setUserEmail }) => {
         <div className="login-page-link">
           Don't have an account? <a href="/signup">Sign up</a>
         </div>
-        <button onClick={() => navigate('/info')} className="login-page-button-info">
-          Info
+        <button onClick={() => navigate('/')} className="login-page-button-info">
+          Home Page
         </button>
       </div>
     </div>

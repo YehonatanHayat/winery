@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../config';
+import '../CSS/Signup.css';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -44,9 +45,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-4">Create a New Account</h2>
+<div className="signup-page">
+        <div className="signup-container">
+        <h2 className="signup-title">Create a New Account</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* First Name and Last Name */}
           <div className="flex space-x-4">
@@ -70,7 +71,7 @@ const Signup = () => {
 
           {/* Date of Birth */}
           <div>
-            <label className="block text-gray-700 mb-1">Date of Birth:</label>
+            <label className="gender-and-date-line">Date of Birth:</label>
             <div className="flex space-x-2">
               <select
                 name="day"
@@ -114,8 +115,8 @@ const Signup = () => {
           </div>
 
           {/* Gender */}
-          <div>
-            <label className="block text-gray-700 mb-1">Gender:</label>
+          <div className="gender-container">
+            <label className="gender-and-date-line">Gender:</label>
             <div className="flex space-x-4">
               <label>
                 <input
@@ -159,7 +160,7 @@ const Signup = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            className="signup-button"
           >
             Sign Up
           </button>
