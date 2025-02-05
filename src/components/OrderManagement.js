@@ -31,7 +31,7 @@ const OrderManagement = () => {
     };
 
     fetchOrders();
-  }, [message]);
+  }, [message, navigate]);
 
   // Cancel an Order
   const handleCancelOrder = async (orderId) => {
