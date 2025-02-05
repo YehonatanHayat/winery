@@ -161,15 +161,15 @@ const Orders = () => {
           <h3>Total Price</h3>
           <p>₪{totalPrice}</p>
         </div>
-
+        <div className="buttons">
         <button onClick={handleOrder} className="button button-order">
           Place Order
         </button>
 
-        <button onClick={() => navigate('/info')} className="button button-back">
+        <button onClick={() => navigate('/')} className="button button-back">
           Back to Homepage
         </button>
-
+        </div>
         {message && <div className="success-message">{message}</div>}
         {error && <div className="error-message">{error}</div>}
       </div>

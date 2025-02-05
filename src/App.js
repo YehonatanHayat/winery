@@ -1,7 +1,7 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; 
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Inventory from './components/Inventory';
@@ -10,37 +10,50 @@ import Info from './components/Info';
 import Finance from './components/Finance';
 import ProtectedRoute from './components/ProtectedRoute';
 import OrderManagement from './components/OrderManagement';
+import About from './components/About';
+
+
 function App() {
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || null);
-  const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || null);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [userRole, setUserRole] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+
 
   useEffect(() => {
-    localStorage.clear();
-    setUserRole(null);
-    setUserEmail(null);
-    navigate('/login');
-  }, []);
+    const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    if (userRole) {
-      localStorage.setItem('userRole', userRole);
-    }
-    if (userEmail) {
-      localStorage.setItem('userEmail', userEmail);
-    }
-  }, [userRole, userEmail]);
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
 
+        if (decoded.exp < currentTime) {
+          console.log('Token expired, logging out...');
+          handleLogout();
+        } else {
+          console.log('Token is valid, restoring user data...');
+          setUserRole(localStorage.getItem('userRole'));
+          setUserEmail(localStorage.getItem('userEmail'));
+        }
+      } catch (err) {
+        console.error('Invalid token:', err);
+        handleLogout();
+      }
+    } 
+    // else {
+    //   console.log('No token found, redirecting to login...');
+    //   navigate('/login');
+    // }
+  }, [navigate]);
 
-  
   const handleLogout = () => {
-    localStorage.clear();
+    console.log('Logging out...');
+    localStorage.removeItem('token'); // Remove token
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
     setUserRole(null);
     setUserEmail(null);
-    setRefreshKey((prevKey) => prevKey + 1);
-    window.location.reload();
-    
+    navigate('/login'); // Redirect to login page
   };
 
   return (
@@ -61,7 +74,6 @@ function App() {
           {userRole && (
             <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">Logout</button>
           )}
-
           {!userRole && (
             <button
               onClick={() => navigate('/login')}
@@ -69,17 +81,15 @@ function App() {
             >
               Login
             </button>
-
-
-            
           )}
         </div>
       </header>
       <Routes>
-        <Route path="/" element={<Info />} />
+        <Route path="/" element={<About />} />
         <Route path="/login" element={<Login setUserRole={setUserRole} setUserEmail={setUserEmail} />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/info" element={<Info />} />
         <Route
           path="/inventory"
           element={
@@ -96,7 +106,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/order-management"
           element={
@@ -105,7 +114,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
