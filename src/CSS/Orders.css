@@ -1,8 +1,12 @@
+/* עיצוב כללי */
 body {
   font-family: 'Georgia', serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden; /* מניעת גלילה אופקית */
 }
 
 .orders-page {
@@ -11,16 +15,17 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
-  color: #050505;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 40px 20px;
+  width: 100vw;
+  box-sizing: border-box;
 }
 
 .orders-container {
-  max-width: 900px;
-  width: 100%;
+  width: 90%;
+  max-width: 600px;
   background: rgba(255, 255, 255, 0.15);
   padding: 40px;
   border-radius: 12px;
@@ -74,6 +79,8 @@ body {
   border-radius: 4px;
   border: none;
   font-size: 1rem;
+  width: 100%;
+  max-width: 80px;
 }
 
 .customer-details {
@@ -89,6 +96,7 @@ body {
   border-radius: 5px;
   border: none;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .total-price {
@@ -122,7 +130,9 @@ body {
   margin-bottom: 10px;
   display: block;
   cursor: pointer;
-  margin: 0 auto 10px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
 }
 
 .button-order {
