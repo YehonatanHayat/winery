@@ -56,12 +56,12 @@ function App() {
         {/* צד שמאל: לוגו + טקסט */}
         <div className="header-left">
           <img
-            src="/photo/Logo.jpg"
+            src="/Photo/Logo.jpg"
             alt="Asfar Winery Logo"
             className="logo"
           />
           <div className="welcome-text">
-            {userEmail ? ` ${userEmail} : מחובר בתור ` : 'ברוכים הבאים ליקב שלנו'}
+            {userEmail ? ` ${userEmail} : מחובר בתור ` : 'ברוכים הבאים'}
           </div>
         </div>
 
