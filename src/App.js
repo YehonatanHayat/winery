@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Inventory from './components/Inventory';
@@ -12,16 +11,15 @@ import ProtectedRoute from './components/ProtectedRoute';
 import OrderManagement from './components/OrderManagement';
 import About from './components/About';
 
+import './App.css'; // ודא שקובץ ה-CSS מיובא
 
 function App() {
   const navigate = useNavigate();
   const [userRole, setUserRole] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
 
-
   useEffect(() => {
     const token = localStorage.getItem('token');
-
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -39,51 +37,68 @@ function App() {
         console.error('Invalid token:', err);
         handleLogout();
       }
-    } 
-    // else {
-    //   console.log('No token found, redirecting to login...');
-    //   navigate('/login');
-    // }
+    }
   }, [navigate]);
 
   const handleLogout = () => {
     console.log('Logging out...');
-    localStorage.removeItem('token'); // Remove token
+    localStorage.removeItem('token');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userEmail');
     setUserRole(null);
     setUserEmail(null);
-    navigate('/login'); // Redirect to login page
+    navigate('/login');
   };
 
   return (
     <div>
-      <header className="bg-gray-800 text-white p-4 flex justify-between">
-        <div>
-          {userEmail ? `Logged in as: ${userEmail}` : 'Welcome to our platform!'}
+      <header className="header-container">
+        {/* צד שמאל: לוגו + טקסט */}
+        <div className="header-left">
+          <img
+            src="/photo/Logo.jpg"
+            alt="Asfar Winery Logo"
+            className="logo"
+          />
+          <div className="welcome-text">
+            {userEmail ? ` ${userEmail} : מחובר בתור ` : 'ברוכים הבאים ליקב שלנו'}
+          </div>
         </div>
-        <div>
+
+        {/* צד ימין: כפתורים */}
+        <div className="header-right">
           {userRole === 'admin' && (
             <>
-              <Link to="/inventory" className="mr-4">Inventory</Link>
-              <Link to="/finance" className="mr-4">Finance</Link>
-              <Link to="/info" className="mr-4">Information</Link>
-              <Link to="/order-management" className="mr-4">OrderManagement</Link>
+              <Link to="/inventory" className="link-button">Inventory</Link>
+              <Link to="/finance" className="link-button">Finance</Link>
+              <Link to="/info" className="link-button">Information</Link>
+              <Link to="/order-management" className="link-button">OrderManagement</Link>
             </>
           )}
-          {userRole && (
-            <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">Logout</button>
-          )}
-          {!userRole && (
-            <button
-              onClick={() => navigate('/login')}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              Login
+
+          {/* כפתור לחנות */}
+          <Link to="/info" className="link-button">
+            חנות
+          </Link>
+
+          {/* כפתור לביצוע הזמנה */}
+          <Link to="/orders" className="link-button">
+            ביצוע הזמנה
+          </Link>
+
+          {/* כפתור התחברות/התנתקות */}
+          {userRole ? (
+            <button onClick={handleLogout} className="logout-button">
+              התנתקות
+            </button>
+          ) : (
+            <button onClick={() => navigate('/login')} className="link-button">
+              התחברות
             </button>
           )}
         </div>
       </header>
+
       <Routes>
         <Route path="/" element={<About />} />
         <Route path="/login" element={<Login setUserRole={setUserRole} setUserEmail={setUserEmail} />} />

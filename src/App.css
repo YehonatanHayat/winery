@@ -1,38 +1,72 @@
+/* הגדרות כלליות קיימות */
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* כותרת ראשית (Header) */
+.header-container {
+  background-color: #282c34; /* צבע רקע לכותרת */
+  color: #fff;              /* צבע טקסט בכותרת */
+  padding: 16px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between; /* צד שמאל וצד ימין נפרדים */
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* צד שמאל (לוגו + טקסט) */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* רווח בין הלוגו לטקסט */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* הלוגו עצמו */
+.logo {
+  height: 60px;        /* גובה לוגו מותאם, אפשר לשנות לפי הצורך */
+  width: auto;         /* לשמור על פרופורציות */
+  object-fit: contain; /* מבטיח שהתמונה תישאר בפרופורציה */
+}
+
+/* טקסט "ברוכים הבאים ליקב שלנו" או "Logged in as..." */
+.welcome-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* צד ימין (כפתורים) */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* קישורים וכפתורים כלליים */
+.link-button {
+  padding: 8px 16px;
+  color: #fff;
+  background-color: #bfa05d; /* צבע זהוב-חום בהיר */
+  border-radius: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.link-button:hover {
+  background-color: #997d46; /* כהה יותר בריחוף */
+}
+
+/* כפתור התנתקות */
+.logout-button {
+  padding: 8px 16px;
+  color: #fff;
+  background-color: #c0392b;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.logout-button:hover {
+  background-color: #a93226;
 }

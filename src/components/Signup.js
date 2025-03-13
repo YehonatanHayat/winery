@@ -34,10 +34,10 @@ const Signup = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Success:', data);
-        alert('User registered successfully!');
-        navigate (`/login`)
+        alert('המשתמש נרשם בהצלחה!');
+        navigate('/login');
       } else {
-        alert('Registration failed. Please try again.');
+        alert('הרישום נכשל. אנא נסה שוב.');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -45,16 +45,16 @@ const Signup = () => {
   };
 
   return (
-<div className="signup-page">
-        <div className="signup-container">
-        <h2 className="signup-title">Create a New Account</h2>
+    <div className="signup-page" dir="rtl">
+      <div className="signup-container">
+        <h2 className="signup-title">צור חשבון חדש</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* First Name and Last Name */}
+          {/* שם פרטי ושם משפחה */}
           <div className="flex space-x-4">
             <input
               type="text"
               name="firstName"
-              placeholder="First Name"
+              placeholder="שם פרטי"
               className="w-full px-4 py-2 border rounded-lg"
               onChange={handleChange}
               required
@@ -62,17 +62,44 @@ const Signup = () => {
             <input
               type="text"
               name="lastName"
-              placeholder="Last Name"
+              placeholder="שם משפחה"
               className="w-full px-4 py-2 border rounded-lg"
               onChange={handleChange}
               required
             />
           </div>
 
-          {/* Date of Birth */}
+          {/* תאריך לידה */}
           <div>
-            <label className="gender-and-date-line">Date of Birth:</label>
+            <label className="gender-and-date-line">תאריך לידה:</label>
             <div className="flex space-x-2">
+            <select
+                name="year"
+                className="w-full px-2 py-2 border rounded-lg"
+                onChange={handleChange}
+                value={formData.year}
+              >
+                {Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i).map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            
+              <select
+                name="month"
+                className="w-full px-2 py-2 border rounded-lg"
+                onChange={handleChange}
+                value={formData.month}
+              >
+                {['ינואר', 'פברואר', 'מרץ', 'אפריל ', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'].map(
+                  (month) => (
+                    <option key={month} value={month}>
+                      {month}
+                    </option>
+                  )
+                )}
+              </select>
               <select
                 name="day"
                 className="w-full px-2 py-2 border rounded-lg"
@@ -85,38 +112,13 @@ const Signup = () => {
                   </option>
                 ))}
               </select>
-              <select
-                name="month"
-                className="w-full px-2 py-2 border rounded-lg"
-                onChange={handleChange}
-                value={formData.month}
-              >
-                {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(
-                  (month) => (
-                    <option key={month} value={month}>
-                      {month}
-                    </option>
-                  )
-                )}
-              </select>
-              <select
-                name="year"
-                className="w-full px-2 py-2 border rounded-lg"
-                onChange={handleChange}
-                value={formData.year}
-              >
-                {Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
+
             </div>
           </div>
 
-          {/* Gender */}
+          {/* מין */}
           <div className="gender-container">
-            <label className="gender-and-date-line">Gender:</label>
+            <label className="gender-and-date-line">מין:</label>
             <div className="flex space-x-4">
               <label>
                 <input
@@ -125,7 +127,7 @@ const Signup = () => {
                   value="Male"
                   onChange={handleChange}
                 />{' '}
-                Male
+                זכר
               </label>
               <label>
                 <input
@@ -134,16 +136,16 @@ const Signup = () => {
                   value="Female"
                   onChange={handleChange}
                 />{' '}
-                Female
+                נקבה
               </label>
             </div>
           </div>
 
-          {/* Email and Password */}
+          {/* אימייל וסיסמה */}
           <input
             type="email"
             name="email"
-            placeholder="Email Address"
+            placeholder="כתובת אימייל"
             className="w-full px-4 py-2 border rounded-lg"
             onChange={handleChange}
             required
@@ -151,25 +153,25 @@ const Signup = () => {
           <input
             type="password"
             name="password"
-            placeholder="Password"
+            placeholder="סיסמה"
             className="w-full px-4 py-2 border rounded-lg"
             onChange={handleChange}
             required
           />
 
-          {/* Submit Button */}
+          {/* כפתור רישום */}
           <button
             type="submit"
             className="signup-button"
           >
-            Sign Up
+            הירשם
           </button>
         </form>
 
         <p className="text-center mt-4 text-sm">
-          Already have an account?{' '}
+          כבר יש לך חשבון?{' '}
           <a href="/login" className="text-green-500 hover:underline">
-            Log in
+            התחבר
           </a>
         </p>
       </div>

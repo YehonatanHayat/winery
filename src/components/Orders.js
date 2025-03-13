@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../CSS/Orders.css';
 import API_BASE_URL from '../config';
+
 const Orders = () => {
   const navigate = useNavigate();
   const [quantities, setQuantities] = useState({});
@@ -16,7 +16,6 @@ const Orders = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    
     const fetchPrices = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/info`);
@@ -34,10 +33,10 @@ const Orders = () => {
         });
 
         setQuantities(initialQuantities);
-        console.log(' Prices fetched:', fetchedPrices);
+        console.log('מחירים נשלפו:', fetchedPrices);
       } catch (err) {
-        console.error(' Error fetching prices:', err);
-        setError('Failed to load wine prices.');
+        console.error('שגיאה בשליפת מחירים:', err);
+        setError('לא הצלחנו לטעון את מחירי היינות.');
       }
     };
 
@@ -62,7 +61,7 @@ const Orders = () => {
     const { name, phone, address } = customerDetails;
 
     if (!name || !phone || !address) {
-      alert('Please fill in all the required fields: Name, Phone, and Address.');
+      alert('אנא מלא את כל השדות הנדרשים: שם, טלפון וכתובת.');
       return;
     }
 
@@ -75,7 +74,7 @@ const Orders = () => {
       }));
 
     if (wines.length === 0) {
-      alert('Please select at least one wine to order.');
+      alert('אנא בחר לפחות יין אחד להזמנה.');
       return;
     }
 
@@ -92,29 +91,29 @@ const Orders = () => {
         setError('');
         setQuantities({});
         setCustomerDetails({ name: '', phone: '', address: '' });
-        console.log(' Order placed successfully:', data.order);
+        console.log('הזמנה בוצעה בהצלחה:', data.order);
       } else {
         setError(data.error);
         setMessage('');
       }
     } catch (err) {
-      console.error(' Error placing order:', err);
-      setError('Failed to place the order. Please try again.');
+      console.error('שגיאה בביצוע ההזמנה:', err);
+      setError('לא הצלחנו לבצע את ההזמנה. אנא נסה שוב.');
       setMessage('');
     }
   };
 
   return (
-    <div className="orders-page">
+    <div dir="rtl" className="orders-page">
       <div className="orders-container">
-        <h2 className="orders-title">Place Your Order</h2>
+        <h2 className="orders-title">בצע את ההזמנה שלך</h2>
 
         {/* תצוגת יינות */}
         <div className="wines-list">
           {Object.keys(prices).map((wine) => (
             <div key={wine} className="wine-item">
               <span className="wine-name">{wine}</span>
-              <span className="wine-price">₪{prices[wine]} per bottle</span>
+              <span className="wine-price"> מחיר לבקבוק ₪ {prices[wine]}</span>
               <input
                 type="number"
                 min="0"
@@ -131,7 +130,7 @@ const Orders = () => {
           <input
             type="text"
             name="name"
-            placeholder="Your Name"
+            placeholder="שם"
             value={customerDetails.name}
             onChange={handleDetailsChange}
             className="input-field"
@@ -140,7 +139,7 @@ const Orders = () => {
           <input
             type="tel"
             name="phone"
-            placeholder="Your Phone Number"
+            placeholder="טלפון"
             value={customerDetails.phone}
             onChange={handleDetailsChange}
             className="input-field"
@@ -149,7 +148,7 @@ const Orders = () => {
           <input
             type="text"
             name="address"
-            placeholder="Your Address"
+            placeholder="כתובת"
             value={customerDetails.address}
             onChange={handleDetailsChange}
             className="input-field"
@@ -158,17 +157,17 @@ const Orders = () => {
         </div>
 
         <div className="total-price">
-          <h3>Total Price</h3>
+          <h3>סה"כ מחיר</h3>
           <p>₪{totalPrice}</p>
         </div>
         <div className="buttons">
-        <button onClick={handleOrder} className="button button-order">
-          Place Order
-        </button>
+          <button onClick={handleOrder} className="button button-order">
+            בצע הזמנה
+          </button>
 
-        <button onClick={() => navigate('/')} className="button button-back">
-          Back to Homepage
-        </button>
+          <button onClick={() => navigate('/')} className="button button-back">
+            חזרה לעמוד הבית
+          </button>
         </div>
         {message && <div className="success-message">{message}</div>}
         {error && <div className="error-message">{error}</div>}

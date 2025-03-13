@@ -27,7 +27,7 @@ const Login = ({ setUserRole, setUserEmail }) => {
 
       if (!response.ok) {
         console.error('Login failed:', data.error || 'Invalid credentials.');
-        setError(data.error || 'Invalid credentials.');
+        setError(data.error || 'פרטי ההתחברות שגויים.');
       } else {
         const { token, role, email } = data;
         console.log('Login successful. Token received:', token);
@@ -40,12 +40,12 @@ const Login = ({ setUserRole, setUserEmail }) => {
         setUserRole(role);
         setUserEmail(email);
 
-        alert(`Login successful! Welcome ${email}`);
+        alert(`התחברת בהצלחה! ברוך הבא ${email}`);
         navigate(role === 'admin' ? '/inventory' : '/orders');
       }
     } catch (err) {
       console.error('An error occurred during login:', err.message);
-      setError('Something went wrong. Please try again.');
+      setError('משהו השתבש. אנא נסה שוב.');
     }
   };
 
@@ -62,15 +62,15 @@ const Login = ({ setUserRole, setUserEmail }) => {
   }, []);
 
   return (
-    <div className="login-page">
+    <div className="login-page" dir="rtl">
       <div className="login-page-container">
-        <h2 className="login-page-title">Welcome</h2>
+        <h2 className="login-page-title">ברוך הבא</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <label className="login-page-label">Email address</label>
+            <label className="login-page-label">כתובת אימייל</label>
             <input
               type="email"
-              placeholder="Your email address"
+              placeholder="כתובת האימייל שלך"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -78,10 +78,10 @@ const Login = ({ setUserRole, setUserEmail }) => {
             />
           </div>
           <div>
-            <label className="login-page-label">Password</label>
+            <label className="login-page-label">סיסמה</label>
             <input
               type="password"
-              placeholder="Your password"
+              placeholder="הסיסמה שלך"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -90,14 +90,14 @@ const Login = ({ setUserRole, setUserEmail }) => {
           </div>
           {error && <p className="login-page-error">{error}</p>}
           <button type="submit" className="login-page-button-signin">
-            Sign in
+            התחבר
           </button>
         </form>
         <div className="login-page-link">
-          Don't have an account? <a href="/signup">Sign up</a>
+          אין לך חשבון? <a href="/signup">הירשם</a>
         </div>
         <button onClick={() => navigate('/')} className="login-page-button-info">
-          Home Page
+          עמוד הבית
         </button>
       </div>
     </div>

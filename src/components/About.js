@@ -6,48 +6,46 @@ const About = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="about-page">
+    <div className="about-page" dir="rtl">
       <div className="about-container">
-        <h2 className="about-title"> Welcome to Our Winery</h2>
+        <h2 className="about-title">ברוכים הבאים ליקב אַסְפָר</h2>
         
         <p className="about-text">
-          Our winery is dedicated to producing high-quality, handcrafted wines made from the finest grapes. 
-          With years of expertise and passion, we bring you a unique experience in every bottle.
+          היקב שלנו מתמקד בייצור יינות איכותיים בעבודת יד, מהענבים הטובים ביותר. עם שנים של מומחיות ותשוקה, אנו מביאים לכם חוויה ייחודית בכל בקבוק.
         </p>
         
-        {/* Section with Running Video */}
+        {/* חלק עם וידאו */}
         <div className="about-video-section">
           <video autoPlay loop muted className="about-video">
             <source src="/Photo/wine8.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
+            הדפדפן שלכם אינו תומך בתג וידאו.
           </video>
         </div>
         
-        {/* Section for Images */}
+        {/* חלק עם תמונות */}
         <div className="about-image-section">
-          <img src="/Photo/wine6.jpg" alt="Vineyard" className="about-image" />
-          <img src="/Photo/wine5.jpg" alt="Wine Tasting" className="about-image" />
+          <img src="/Photo/wine6.jpg" alt="כרם" className="about-image" />
+          <img src="/Photo/wine5.jpg" alt="טעימות יין" className="about-image" />
         </div>
         
-        <h3 className="about-subtitle">Our Story</h3>
+        <h3 className="about-subtitle">הסיפור שלנו</h3>
         <p className="about-text">
-          Founded in 1990, our winery started as a small family-owned business and has grown into an internationally recognized name.
-          Our mission is to create wines that bring people together and tell a story in every sip.
-        </p>
-                {/* Link to the Info (Shop) Page */}
-          <div className="shop-link">
-             <h3 className="about-subtitle">Our Wine</h3>
-          <p className="about-text">Discover our collection of fine wines.</p>
+        הכרמים שלנו נטעו בשנת 2012  בפני קדם שבמזרח גוש עציון. החלקות ממוקמות באזור ייחודי מאוד בספר המדבר בגובה רב וצופות לים המלח. לאחר גילגולים שונים החלטנו לפתוח יקב משפחתי קטן מתוך שאיפה לשלוט באופן מלא בכל שלבי הייצור של היין, משלב גידול הענבים בכרם, מועד הבציר ועד הכנת היין, בחירת החביות והרכב הבלנדים.        </p>
+        
+        {/* קישור לדף החנות */}
+        <div className="shop-link">
+          <h3 className="about-subtitle">היינות שלנו</h3>
+          <p className="about-text">גלו את אוסף יינות הבוטיק שלנו.</p>
           <div>
             <button onClick={() => navigate('/info')} className="info-page-button info-page-button-order">
-              Visit Our Shop
+              בקרו בחנות שלנו
             </button>
           </div>
         </div>
         
-        <h3 className="about-subtitle">Follow Us</h3>
+        <h3 className="about-subtitle">עקבו אחרינו</h3>
         <p className="about-text">
-          "ניתן לעקוב אחרינו גם בפייסבוק "הכרם של היאט
+          ניתן לעקוב אחרינו גם בפייסבוק "הכרם של היאט"
         </p>
         <div className="social-media">
           <a href="https://www.facebook.com/Asfar.winery/" target="_blank" rel="noopener noreferrer">
